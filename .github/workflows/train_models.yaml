@@ -20,10 +20,10 @@ on:
 
 jobs:
   ContinuousIntegration:
-    uses: ./.github/workflows/ci/pylint_and_pytest.yaml
+    uses: ./.github/workflows/pylint_and_pytest.yaml
 
   BuildAndPush:
-    uses: ./.github/workflows/build/lambda_and_ec2.yaml
+    uses: ./.github/workflows/lambda_and_ec2.yaml
     secrets:
       ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
@@ -34,7 +34,7 @@ jobs:
     needs: [ContinuousIntegration]
 
   Terraform:
-    uses: ./.github/workflows/terraform/review_and_apply.yaml
+    uses: ./.github/workflows/review_and_apply.yaml
     secrets:
       TF_LOG: ${{ secrets.TF_LOG }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
