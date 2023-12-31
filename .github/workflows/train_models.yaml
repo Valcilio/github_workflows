@@ -26,7 +26,7 @@ jobs:
       - name: Checkout the repository to the runner
         uses: actions/checkout@v2
     
-  Run CI:
+  RunCI:
     uses: ./.github/workflows/pylint_and_pytest.yaml
 
   # BuildAndPush:
