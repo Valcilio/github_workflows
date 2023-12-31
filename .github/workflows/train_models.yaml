@@ -19,25 +19,35 @@ on:
         required: true
 
 jobs:
+
+      - name: Checkout the repository to the runner
+        uses: actions/checkout@v2
+
   ContinuousIntegration:
-    uses: ./.github/workflows/pylint_and_pytest.yaml
+    steps:
 
-  BuildAndPush:
-    uses: ./.github/workflows/lambda_and_ec2.yaml
-    secrets:
-      ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      LAMBDA_NAME: ${{ secrets.LAMBDA_NAME }}
-      EC2_NAME: ${{ secrets.EC2_NAME }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    needs: [ContinuousIntegration]
+      - name: Checkout the repository to the runner
+        uses: actions/checkout@v2
+    
+      - name: Run CI
+        uses: ./.github/workflows/pylint_and_pytest.yaml
 
-  Terraform:
-    uses: ./.github/workflows/review_and_apply.yaml
-    secrets:
-      TF_LOG: ${{ secrets.TF_LOG }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    needs: [BuildAndPush]
+  # BuildAndPush:
+  #   uses: ./.github/workflows/lambda_and_ec2.yaml
+  #   secrets:
+  #     ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+  #     AWS_REGION: ${{ secrets.AWS_REGION }}
+  #     LAMBDA_NAME: ${{ secrets.LAMBDA_NAME }}
+  #     EC2_NAME: ${{ secrets.EC2_NAME }}
+  #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #   needs: [ContinuousIntegration]
+
+  # Terraform:
+  #   uses: ./.github/workflows/review_and_apply.yaml
+  #   secrets:
+  #     TF_LOG: ${{ secrets.TF_LOG }}
+  #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #   needs: [BuildAndPush]
 
