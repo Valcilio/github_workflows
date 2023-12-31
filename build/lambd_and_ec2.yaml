@@ -1,0 +1,73 @@
+name: Build and Push
+on: 
+  workflow_call:
+    secrets:
+      ACCOUNT_ID:
+        required: true
+      AWS_REGION:
+        required: true
+      LAMBDA_NAME:
+        required: true
+      EC2_NAME:
+        required: true
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  LAMBDA_NAME: ${{ secrets.LAMBDA_NAME }}
+  EC2_NAME: ${{ secrets.EC2_NAME }}
+
+jobs:
+  lambda-build-and-push:
+    name: Build and Push Lambda Image
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./
+
+    steps:
+      - name: Checkout the repository to the runner
+        uses: actions/checkout@v2
+
+      - name: Build Image
+        run: |- 
+          ls -la
+          docker build -t ${{ env.LAMBDA_NAME }} -f Dockerfile.lambda .
+
+      - name: Push Image
+        #if: github.ref == 'refs/heads/master'
+        run: |-
+          aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+          docker tag ${{ env.LAMBDA_NAME }} ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.LAMBDA_NAME }}:latest
+          docker push ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.LAMBDA_NAME }}:latest
+
+  ec2-build-and-push:
+    name: Build and Push EC2 Image
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./
+
+    steps:
+      - name: Checkout the repository to the runner
+        uses: actions/checkout@v2
+
+      - name: Build Image
+        run: |- 
+          ls -la
+          docker build -t ${{ env.EC2_NAME }} .
+
+      - name: Push Image
+        #if: github.ref == 'refs/heads/master'
+        run: |-
+          aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+          docker tag ${{ env.EC2_NAME }} ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.EC2_NAME }}:latest
+          docker push ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.EC2_NAME }}:latest
