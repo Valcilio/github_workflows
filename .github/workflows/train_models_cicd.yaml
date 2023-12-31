@@ -19,16 +19,9 @@ on:
         required: true
 
 jobs:
-
-  # Configure:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout the repository to the runner
-  #       uses: actions/checkout@v2
     
   ContinuousIntegration:
     uses: ./.github/workflows/pylint_and_pytest.yaml
-    # needs: [Configure]
 
   BuildAndPush:
     uses: ./.github/workflows/bp_lambda_ec2.yaml
