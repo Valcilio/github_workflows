@@ -23,12 +23,11 @@ jobs:
   ContinuousIntegration:
     runs-on: ubuntu-latest
     steps:
-
       - name: Checkout the repository to the runner
         uses: actions/checkout@v2
     
-      - name: Run CI
-        uses: ./.github/workflows/pylint_and_pytest.yaml
+  Run CI:
+    uses: ./.github/workflows/pylint_and_pytest.yaml
 
   # BuildAndPush:
   #   uses: ./.github/workflows/lambda_and_ec2.yaml
