@@ -20,11 +20,11 @@ on:
 
 jobs:
 
-  Configure:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout the repository to the runner
-        uses: actions/checkout@v2
+  # Configure:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout the repository to the runner
+  #       uses: actions/checkout@v2
     
   ContinuousIntegration:
     uses: ./.github/workflows/pylint_and_pytest.yaml
