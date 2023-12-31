@@ -28,6 +28,7 @@ jobs:
     
   ContinuousIntegration:
     uses: ./.github/workflows/pylint_and_pytest.yaml
+    needs: [Configure]
 
   BuildAndPush:
     uses: ./.github/workflows/bp_lambda_ec2.yaml
