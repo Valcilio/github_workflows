@@ -21,6 +21,7 @@ on:
 jobs:
 
   ContinuousIntegration:
+    runs-on: ubuntu-latest
     steps:
 
       - name: Checkout the repository to the runner
