@@ -20,8 +20,8 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   
 jobs:
-  TerragruntPRD:
-    name: Init, Validate, Plan and Apply
+  DestroyTerragruntPRD:
+    name: Destroy Terragrunt PRD Resources
     runs-on: ubuntu-latest
     defaults:
       run:
