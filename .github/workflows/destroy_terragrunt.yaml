@@ -52,6 +52,6 @@ jobs:
 
       - name:  Terragrunt Destroy
         id: destroy
-        if: if: ${{ github.event_name == 'workflow_dispatch' }}
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |-
           terragrunt run-all destroy --terragrunt-non-interactive
