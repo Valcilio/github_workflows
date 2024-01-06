@@ -58,6 +58,16 @@ jobs:
       - name: Terragrunt Plan
         id: plan
         run: |-
+          terragrunt run-all fmt -check --terragrunt-non-interactive
+
+      - name: Terragrunt Plan
+        id: plan
+        run: |-
+          terragrunt run-all validate --terragrunt-non-interactive
+
+      - name: Terragrunt Plan
+        id: plan
+        run: |-
           terragrunt run-all plan --terragrunt-non-interactive
 
       - name: Terragrunt Apply
