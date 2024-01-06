@@ -55,10 +55,15 @@ jobs:
         run: |-
           terragrunt run-all init --terragrunt-non-interactive
 
-      - name: Terragrunt Check Format
-        id: check-format
+      - name: Terraform Check Format
+        id: check-format-tf
         run: |-
-          terragrunt run-all fmt -check --terragrunt-non-interactive
+          terraform fmt -check -recursive
+
+      - name: Terragrunt Check Format
+        id: check-format-hcl
+        run: |-
+          terragrunt hclfmt --terragrunt-check --terragrunt-non-interactive
 
       - name: Terragrunt Validate
         id: validate
