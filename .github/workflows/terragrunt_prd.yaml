@@ -55,13 +55,13 @@ jobs:
         run: |-
           terragrunt run-all init --terragrunt-non-interactive
 
-      - name: Terragrunt Plan
-        id: plan
+      - name: Terragrunt Check Format
+        id: check-format
         run: |-
           terragrunt run-all fmt -check --terragrunt-non-interactive
 
-      - name: Terragrunt Plan
-        id: plan
+      - name: Terragrunt Validate
+        id: validate
         run: |-
           terragrunt run-all validate --terragrunt-non-interactive
 
