@@ -1,0 +1,81 @@
+---
+name: Terragrunt Project PRD
+on: 
+  workflow_call:
+    secrets:
+      TF_LOG:
+        required: true
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      SSH_PRIVATE_KEY:
+        required: true
+      KNOWN_HOSTS:
+        required: true
+
+env:
+  TF_LOG: ${{ secrets.TF_LOG }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  
+jobs:
+  TerragruntPRD:
+    name: Init, Validate, Plan and Apply
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./terragrunt/prd
+
+    steps:
+      - name: Adding SSH-KEY to pipeline
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          name: id_rsa
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+
+      - name: Checkout the repository to the runner
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform 1.3.0
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.3.0
+
+      - name: Setup Terragrunt v0.38.4
+        run: |
+          sudo wget -q -O /bin/terragrunt "https://github.com/gruntwork-io/terragrunt/releases/download/v0.38.4/terragrunt_linux_amd64"
+          sudo chmod +x /bin/terragrunt
+          terragrunt -v
+
+      - name:  Terragrunt Init
+        id: init
+        run: |-
+          terragrunt run-all init --terragrunt-non-interactive
+
+      - name: Terraform Check Format
+        id: check-format-tf
+        run: |-
+          terraform fmt -check -recursive
+
+      - name: Terragrunt Check Format
+        id: check-format-hcl
+        run: |-
+          terragrunt hclfmt --terragrunt-check --terragrunt-non-interactive
+
+      - name: Terragrunt Validate
+        id: validate
+        run: |-
+          terragrunt run-all validate --terragrunt-non-interactive
+
+      - name: Terragrunt Plan
+        id: plan
+        run: |-
+          terragrunt run-all plan --terragrunt-non-interactive
+
+      - name: Terragrunt Apply
+        id: apply
+        run: |-
+          terragrunt run-all apply --terragrunt-non-interactive
