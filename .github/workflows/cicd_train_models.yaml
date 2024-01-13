@@ -1,5 +1,5 @@
 ---
-name: Workflow Main
+name: Train Model Workflow
 on: 
   workflow_call:
     secrets:
@@ -9,15 +9,11 @@ on:
         required: true
       LAMBDA_NAME:
         required: true
-      TF_LOG:
+      EC2_NAME:
         required: true
       AWS_ACCESS_KEY_ID:
         required: true
       AWS_SECRET_ACCESS_KEY:
-        required: true
-      SSH_PRIVATE_KEY:
-        required: true
-      KNOWN_HOSTS:
         required: true
 
 jobs:
@@ -26,22 +22,12 @@ jobs:
     uses: ./.github/workflows/pylint_and_pytest.yaml
 
   BuildAndPush:
-    uses: ./.github/workflows/bp_base.yaml
+    uses: ./.github/workflows/bp_lambda_ec2.yaml
     secrets:
       ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
-      PROJ_NAME: ${{ secrets.LAMBDA_NAME }}
+      LAMBDA_NAME: ${{ secrets.LAMBDA_NAME }}
+      EC2_NAME: ${{ secrets.EC2_NAME }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     needs: [ContinuousIntegration]
-
-  TerragruntProjectPRD:
-    uses: ./.github/workflows/terragrunt_proj_prd.yaml
-    secrets:
-      TF_LOG: ${{ secrets.TF_LOG }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-      KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
-    needs: [BuildAndPush]
-

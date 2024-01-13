@@ -22,7 +22,7 @@ env:
 
 jobs:
   lambda-build-and-push:
-    name: Build and Push Lambda Image
+    name: Build and Push Image
     runs-on: ubuntu-20.04
     defaults:
       run:
