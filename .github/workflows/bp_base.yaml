@@ -21,8 +21,8 @@ env:
   ECR_PROJ_NAME: ${{ secrets.ECR_PROJ_NAME }}
 
 jobs:
-  lambda-build-and-push:
-    name: Build and Push Image
+  PROJ-build-and-push:
+    name: Build and Push PROJ Image
     runs-on: ubuntu-20.04
     defaults:
       run:
@@ -42,5 +42,5 @@ jobs:
         #if: github.ref == 'refs/heads/master'
         run: |-
           aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
-          docker tag ${{ env.ECR_PROJ_NAME }} ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/ecr-prd-${{ env.ECR_PROJ_NAME }}:latest
+          docker tag ${{ env.ECR_PROJ_NAME }} ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_PROJ_NAME }}:latest
           docker push ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_PROJ_NAME }}:latest
