@@ -21,8 +21,8 @@ env:
   ECR_PROJ_NAME: ${{ secrets.ECR_PROJ_NAME }}
 
 jobs:
-  PROJ-build-and-push:
-    name: Build and Push PROJ Image
+  build-and-push:
+    name: Build and Push Image
     runs-on: ubuntu-20.04
     defaults:
       run:
