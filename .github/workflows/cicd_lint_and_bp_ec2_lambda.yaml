@@ -1,5 +1,5 @@
 ---
-name: Train Model Workflow
+name: Lint and BP (EC2 and Lambda)
 on: 
   workflow_call:
     secrets:
