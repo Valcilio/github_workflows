@@ -27,9 +27,9 @@ jobs:
 
       - name: Lint
         run: |- 
-          pylint --disable C0103 .
+          pylint .
 
       - name: Test
         run: |-
           pytest .
-        continue-on-error: true
+        continue-on-error: false
