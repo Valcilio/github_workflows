@@ -1,0 +1,63 @@
+---
+name: Terragrunt PRD
+on: 
+  workflow_call:
+    secrets:
+      TF_LOG:
+        required: true
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      AWS_REGION:
+        required: true
+
+env:
+  TF_LOG: ${{ secrets.TF_LOG }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  
+jobs:
+  TerragruntPRD:
+    name: Init, Validate, Plan and Apply
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./prd
+
+    steps:
+
+      - name: Checkout the repository to the runner
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform 1.3.0
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.3.0
+
+      - name:  Terraform Init
+        id: init
+        run: |-
+          terragrunt init
+
+      - name: Terraform Check Format
+        id: check-format-tf
+        run: |-
+          terraform fmt -check -recursive
+
+      - name: Terragrunt Validate
+        id: validate
+        run: |-
+          terraform validate
+
+      - name: Terragrunt Plan
+        id: plan
+        run: |-
+          terragrunt plan -out tf.data
+
+      - name: Terragrunt Apply
+        id: apply
+        run: |-
+          terragrunt apply tf.data
