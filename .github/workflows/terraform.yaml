@@ -1,5 +1,5 @@
 ---
-name: Terragrunt PRD
+name: Terraform
 on: 
   workflow_call:
     secrets:
@@ -19,7 +19,7 @@ env:
   AWS_REGION: ${{ secrets.AWS_REGION }}
   
 jobs:
-  TerragruntPRD:
+  Terraform:
     name: Init, Validate, Plan and Apply
     runs-on: ubuntu-latest
     defaults:
@@ -60,4 +60,4 @@ jobs:
       - name: Terragrunt Apply
         id: apply
         run: |-
-          terragrunt apply tf.data
+          terragrunt apply tf.data -auto-approve
