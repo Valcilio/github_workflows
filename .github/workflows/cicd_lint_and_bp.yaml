@@ -13,6 +13,8 @@ on:
         required: true
       AWS_SECRET_ACCESS_KEY:
         required: true
+      IMAGE_TAG:
+          required: false
 
 jobs:
     
@@ -31,4 +33,5 @@ jobs:
       ECR_PROJ_NAME: ${{ secrets.ECR_PROJ_NAME }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      IMAGE_TAG: ${{ secrets.IMAGE_TAG || 'latest' }}
     needs: [ContinuousIntegration]
