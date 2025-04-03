@@ -25,7 +25,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./prd
+        working-directory: ./
 
     steps:
 
@@ -40,24 +40,24 @@ jobs:
       - name:  Terraform Init
         id: init
         run: |-
-          terragrunt init
+          terraform init
 
       - name: Terraform Check Format
         id: check-format-tf
         run: |-
           terraform fmt -check -recursive
 
-      - name: Terragrunt Validate
+      - name: Terraform Validate
         id: validate
         run: |-
           terraform validate
 
-      - name: Terragrunt Plan
+      - name: Terraform Plan
         id: plan
         run: |-
-          terragrunt plan -out tf.data
+          terraform plan -out tf.data
 
-      - name: Terragrunt Apply
+      - name: Terraform Apply
         id: apply
         run: |-
-          terragrunt apply tf.data -auto-approve
+          Terraform apply tf.data -auto-approve
