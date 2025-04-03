@@ -16,7 +16,7 @@ on:
       TF_LOG:
         required: false
       IMAGE_TAG:
-        required: false
+        required: true
 
 jobs:
     
