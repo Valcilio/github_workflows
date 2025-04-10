@@ -13,6 +13,8 @@ on:
         required: true
       IMAGE_TAG:
         required: false
+      TF_WORKING_DIR:
+        required: false
 
 env:
   TF_LOG: ${{ secrets.TF_LOG }}
@@ -20,6 +22,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ${{ secrets.AWS_REGION }}
   IMAGE_TAG: ${{ secrets.IMAGE_TAG || 'latest' }}
+  TF_WORKING_DIR: ${{ secrets.TF_WORKING_DIR || './' }}
   
 jobs:
   Terraform:
@@ -28,7 +31,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./
+        working-directory: ${{ env.TF_WORKING_DIR }}
 
     steps:
 
