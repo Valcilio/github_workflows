@@ -4,7 +4,7 @@ on:
     secrets:
       ACCOUNT_ID:
         required: true
-      AWS_REGION:
+      AWS_DEFAULT_REGION:
         required: true
       ECR_PROJ_NAME:
         required: true
@@ -19,7 +19,7 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
-  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
   ECR_PROJ_NAME: ${{ secrets.ECR_PROJ_NAME }}
   IMAGE_TAG: ${{ secrets.IMAGE_TAG || 'latest' }}
 
@@ -44,6 +44,6 @@ jobs:
       - name: Push Image
         #if: github.ref == 'refs/heads/master'
         run: |-
-          aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
-          docker tag ${{ env.ECR_PROJ_NAME }} ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_PROJ_NAME }}:${{ env.IMAGE_TAG }}
-          docker push ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_PROJ_NAME }}:${{ env.IMAGE_TAG }}
+          aws ecr get-login-password --region ${{ env.AWS_DEFAULT_REGION }} | docker login --username AWS --password-stdin ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com
+          docker tag ${{ env.ECR_PROJ_NAME }} ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.ECR_PROJ_NAME }}:${{ env.IMAGE_TAG }}
+          docker push ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_DEFAULT_REGION }}.amazonaws.com/${{ env.ECR_PROJ_NAME }}:${{ env.IMAGE_TAG }}

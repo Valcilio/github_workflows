@@ -5,7 +5,7 @@ on:
     secrets:
       ACCOUNT_ID:
         required: true
-      AWS_REGION:
+      AWS_DEFAULT_REGION:
         required: true
       ECR_PROJ_NAME:
         required: true
@@ -25,7 +25,7 @@ jobs:
   ContinuousIntegration:
     uses: ./.github/workflows/pylint_and_pytest.yaml
     secrets:
-      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION || 'us-east-1' }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
@@ -33,7 +33,7 @@ jobs:
     uses: ./.github/workflows/bp_base.yaml
     secrets:
       ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
-      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
       ECR_PROJ_NAME: ${{ secrets.ECR_PROJ_NAME }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -44,7 +44,7 @@ jobs:
     uses:  ./.github/workflows/terraform_docker_local.yaml
     secrets:
       TF_LOG: ${{ secrets.TF_LOG || 'OFF' }}
-      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       IMAGE_TAG: ${{ secrets.IMAGE_TAG || 'latest' }}
