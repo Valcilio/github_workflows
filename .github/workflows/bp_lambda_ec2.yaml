@@ -26,7 +26,7 @@ env:
 jobs:
   lambda-build-and-push:
     name: Build and Push Lambda Image
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     defaults:
       run:
         shell: bash
@@ -50,7 +50,7 @@ jobs:
 
   ec2-build-and-push:
     name: Build and Push EC2 Image
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     defaults:
       run:
         shell: bash
